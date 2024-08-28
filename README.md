@@ -5,21 +5,76 @@ Simple Next JS application to track study time wrt to the subjects along with th
 ## Tech Stacks to be used
 
 - Front-end: NextJS with app router, Tailwind, Axios
-- Back-end: Node/Express
-- State Management: Recoil
-- Authentication: JWT + Middlewares
-- Database: Store the subject names with subject study times in sub.txt, todos of user in todos.txt and perform operations like add/delete todos/subjects or save new study time using the native **fs module** in javascript as a database.
+- Back-end: Next API Routes/Route Handlers
+- Misc: Recoil, Zod
+- Authentication: NextAuth (Google only) (you can use Supabase Authentication if you want)
+- Database: Supabase DB, Prisma/Drizzle as ORM
+- File Storage: Use Supabase storage to store captured images.
+- Deployment: Vercel and Docker
 
-## Screens
+  
+## Screens with Routes
 
-<img width="978" alt="image" src="https://github.com/user-attachments/assets/6ff26d18-f067-4707-8351-21618befd199">
+### landing page:
+  - route: '/'
+  - desc: cool saas landing page with proper use of component libraries.
+<img width="728" alt="image" src="https://github.com/user-attachments/assets/7c01d922-d45c-430f-a866-187c06e16282">
+
+### login page:
+  - route: '/login'
+  - desc: simple login page built using NextAuth (Implement Google Login only for now)
+<img width="643" alt="image" src="https://github.com/user-attachments/assets/614ef416-8b99-4c07-9dc7-ff7469a01754">
+
+### home page:
+  - route: '/home'
+  - desc: home page with total productive time and different subjects with their time.
+<img width="643" alt="image" src="https://github.com/user-attachments/assets/148fcbe2-cf52-45c1-a1f5-b2f8110964e8">
+
+### create subject:
+  - route: '/createsubject'
+  - desc: simple subject name as input to create a new subject
+<img width="650" alt="image" src="https://github.com/user-attachments/assets/faa6ea17-7216-4e7d-a158-eb329749fae6">
 
 
-<img width="536" alt="image" src="https://github.com/user-attachments/assets/9dc9b914-1ea2-4324-b134-9645865e100d">
+### subject page:
+  - route: '/subject1'
+  - desc: This is a subject-specific dynamic route with total time + break time for that subject along with todos associated with that subject
+<img width="643" alt="image" src="https://github.com/user-attachments/assets/9bb07c65-7781-4e84-a583-c9ddd9009843">
 
+### Capture
+  - route: '/subject1' (same as subject route)
+  - desc: utilize camera web API to access the user's camera in the browser and capture the photo.
+    <img width="650" alt="image" src="https://github.com/user-attachments/assets/2c3b34fb-b2df-431d-b4a2-15f4836bfa69">
 
-<img width="972" alt="image" src="https://github.com/user-attachments/assets/2ef6f52f-f6a9-4bfa-959c-c09cd2a50da3">
+## Schemas
 
+These are just **suggestions** for schemas of Subject and Task, you can implement these according to yourself.
 
+```
+subject {
+    time: (string),
+    breakTime: (string),
+    createdAt: (date/time),
+    completedAt: (date/time),
+    tasks: [task]
+}
+```
+```
+task{
+    content: (string)
+    isCompleted: (boolean)
+    imgURL: ""
+    createdAt: (date/time)
+    completedAt: (date/time)
+}
+```
 
-<img width="740" alt="image" src="https://github.com/user-attachments/assets/7c300056-9b77-4d0b-ac66-23e1107aa1ef">
+**Note**: Flow of capturing the Image for each task completion is as follows
+- click on any task to mark it completed
+- camera will be opened
+- use camera web api to capture images (or any library compatible with NextJs)
+- upload image to supabase storage and get URL of image
+- update this task's entry as completed into db with imgURL recieved from supabse
+
+  **DO ANYTHING IN ANY WAY, ONLY FUNCTIONALITY OF WEB APP MATTERS**
+
